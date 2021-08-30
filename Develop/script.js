@@ -16,7 +16,7 @@ var generateBtn = document.querySelector("#generate");
 function getPasswordOptions() {
   //getting the password length from the user
   var passwordLength = parseInt(prompt("How long would you like your password to be? Please pick a number between 8 and 128."));
-  
+  //get the password criteria from the user
     if (passwordLength !==NaN && passwordLength >= 8 && passwordLength <= 128) {
       containsLowerCase = confirm('Would you like lower case letters in your password?');
       containsUpperCase = confirm('Would you like upper case letters in your password?');
@@ -27,6 +27,7 @@ function getPasswordOptions() {
         do {
     passwordLength = parseInt(prompt('Try Again, Please enter a NUMBER BETWEEN 8 and 128 in numeric form.'));
         }
+        //keep asking for the password length until the user input is between 8 and 128
         while (passwordLength > 128 || passwordLength < 8);
       containsLowerCase = confirm('Would you like lower case letters in your password.');
       containsUpperCase = confirm('Would you like upper case letters in your password?');
@@ -36,6 +37,7 @@ function getPasswordOptions() {
 
   }
 
+//if user doesn't choose any type of characters go return to the beginning
   if(!containsNumeric && !containsSpecialChar && !containsUpperCase && !containsLowerCase) {
     alert("Please select at least one character type for your password.");
     return;
@@ -52,18 +54,18 @@ function getPasswordOptions() {
 
       
 };
-
+//make a random order function to randomize the character order
 function randomCharacters(array) {
   return array[Math.floor(Math.random() * array.length)];
 
 }
-
+//generate the password based on the user choices
 function generatePassword() {
   var options = getPasswordOptions();
   var password = [];
   var possibleChar = [];
   var guaranteeChar = [];
-
+//if user chose to include a specific type of character randomize and add to the password array 
   if(options.special) {
     possibleChar = possibleChar.concat(specialCharacters);
     guaranteeChar.push(randomCharacters(specialCharacters));
@@ -87,12 +89,13 @@ function generatePassword() {
     guaranteeChar.push(randomCharacters(num));
   }
   password.concat(guaranteeChar);
-
+//add characters until the length requirement has been met
   for (var i=0; i<options.length; i++) {
     var charResult = randomCharacters(possibleChar);
     password.push(charResult);
   }
- console.log(password)
+  return password.join('');
+  
 };
 
 // Write password to the #password input
@@ -101,7 +104,7 @@ function writePassword() {
   //text area where the generated password is displayed 
   var passwordText = document.querySelector("#password");
 
-  passwordText.innerHTML = password;
+  passwordText.value = password;
   console.log(password);
 }
 
